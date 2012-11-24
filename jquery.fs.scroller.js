@@ -1,7 +1,7 @@
 /*
  * Scroller Plugin [Formstone Library]
  * @author Ben Plum
- * @version 0.5.3
+ * @version 0.5.4
  *
  * Copyright © 2012 Ben Plum <mr@benplum.com>
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
@@ -185,7 +185,10 @@ if (jQuery) (function($) {
 							.on("mousedown.scroller", ".scroller-handle", d, _onHandleDown)
 							.data("scroller", d);
 				
-				pub.reset.apply(this, [d]);
+				pub.reset.apply($scrollbar, [d]);
+				$(window).one("load", function() {
+					pub.reset.apply($scrollbar, [d]);
+				})
 			}
 		}
 		
