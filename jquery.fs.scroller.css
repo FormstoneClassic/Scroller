@@ -1,13 +1,13 @@
 /*
  * Scroller Plugin [Formstone Library]
  * @author Ben Plum
- * @version 0.5.4
+ * @version 0.5.5
  *
  * Copyright © 2012 Ben Plum <mr@benplum.com>
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
  
-	.scroller { overflow: hidden; position: relative; }
+	.scroller { overflow: hidden; overflow-x: hidden; overflow-y: hidden; position: relative; }
 	.scroller-content { height: 100%; overflow: auto; overflow-x: hidden; overflow-y: auto; position: relative; z-index: 1; }
 	.scroller-bar { background: #FBFBFB; border-left: 1px solid #EEEEEE; display: none; height: 100%; position: absolute; right: 0; top: 0; width: 20px; z-index: 2; }
 	.scroller-track { background: #FBFBFB; height: 100%; overflow: hidden; position: relative; width: 100%; }
@@ -18,10 +18,15 @@
 		   	 -o-transition: right 0.1s linear, width 0.1s linear;
 		   	 	transition: right 0.1s linear, width 0.1s linear;
 	}
-	.scroller::-webkit-scrollbar,
-	.scroller::-webkit-scrollbar-track,
-	.scroller::-webkit-scrollbar-thumb,
-	.scroller::-webkit-scrollbar-thumb:window-inactive { background: transparent; }
+	
+	/* Webkit Fix */
+	.scroller-content::-webkit-scrollbar,
+	.scroller-content::-webkit-scrollbar-button,
+	.scroller-content::-webkit-scrollbar-track,
+	.scroller-content::-webkit-scrollbar-track-piece,
+	.scroller-content::-webkit-scrollbar-thumb,
+	.scroller-content::-webkit-scrollbar-corner,
+	.scroller-content::-webkit-resizer { background: transparent; opacity: 0; }
 	
 	/* Active Scrollbar */
 	.scroller-active .scroller-content { padding: 20px; }
