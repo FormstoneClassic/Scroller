@@ -1,7 +1,7 @@
 /*
  * Scroller Plugin [Formstone Library]
  * @author Ben Plum
- * @version 0.5.5
+ * @version 0.5.8
  *
  * Copyright © 2012 Ben Plum <mr@benplum.com>
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
@@ -69,10 +69,11 @@ if (jQuery) (function($) {
 			return $(this);
 		},
 		
-		reset: function(data)  {
+		reset: function(_data)  {
 			var $items = $(this);
+			var data;
 			for (var i = 0, count = $items.length; i < count; i++) {
-				var data = data || $items.eq(i).data("scroller");
+				data = _data || $items.eq(i).data("scroller");
 				
 				if (typeof data != "undefined") {
 					data.$scrollbar.addClass("scroller-setup");
@@ -172,7 +173,7 @@ if (jQuery) (function($) {
 					$scrollbar.addClass("scroller-horizontal");
 				}
 				
-				var d = $.extend({
+				data = $.extend({
 					$scrollbar: $scrollbar,
 					$content: $scrollbar.find(".scroller-content"),
 					$bar: $scrollbar.find(".scroller-bar"),
@@ -180,15 +181,15 @@ if (jQuery) (function($) {
 					$handle: $scrollbar.find(".scroller-handle")
 				}, data);
 				
-				d.$content.on("scroll.scroller", d, _onScroll);
-				d.$scrollbar.on("mousedown.scroller", ".scroller-track", d, _onTrackDown)
-							.on("mousedown.scroller", ".scroller-handle", d, _onHandleDown)
-							.data("scroller", d);
+				data.$content.on("scroll.scroller", data, _onScroll);
+				data.$scrollbar.on("mousedown.scroller", ".scroller-track", data, _onTrackDown)
+							   .on("mousedown.scroller", ".scroller-handle", data, _onHandleDown)
+							   .data("scroller", data);
 				
-				pub.reset.apply($scrollbar, [d]);
+				pub.reset.apply($scrollbar, [data]);
 				$(window).one("load", function() {
-					pub.reset.apply($scrollbar, [d]);
-				})
+					pub.reset.apply($scrollbar, [data]);
+				});
 			}
 		}
 		
@@ -251,8 +252,8 @@ if (jQuery) (function($) {
 		
 		data.$scrollbar.data("scroller", data);
 		data.$content.off(".scroller");
-		$("body").on("mousemove.scroller", data, _onHandleMove)
-				 .on("mouseup.scroller", data, _onHandleUp);
+		$("body").on("mousemove.scroller", data, _onMouseMove)
+				 .on("mouseup.scroller", data, _onMouseUp);
 	}
 	
 	function _onHandleDown(e) {
@@ -273,11 +274,11 @@ if (jQuery) (function($) {
 		
 		data.$scrollbar.data("scroller", data);
 		data.$content.off(".scroller");
-		$("body").on("mousemove.scroller", data, _onHandleMove)
-				 .on("mouseup.scroller", data, _onHandleUp);
+		$("body").on("mousemove.scroller", data, _onMouseMove)
+				 .on("mouseup.scroller", data, _onMouseUp);
 	}
 	
-	function _onHandleMove(e) {
+	function _onMouseMove(e) {
 		e.preventDefault();
 		e.stopPropagation();
 		
@@ -297,7 +298,7 @@ if (jQuery) (function($) {
 		_position.apply(data.$scrollbar, [data, pos]);
 	}
 	
-	function _onHandleUp(e) {
+	function _onMouseUp(e) {
 		e.preventDefault();
 		e.stopPropagation();
 		
