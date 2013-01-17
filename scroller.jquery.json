@@ -5,9 +5,10 @@
 	"keywords": [
 		"scrollbar",
 		"ui",
-		"formstone"
+		"formstone",
+		"benplum"
 	],
-	"version": "0.5.8",
+	"version": "0.5.9",
 	"author": {
 		"name": "Ben Plum",
 		"url": "http://www.benplum.com"
