@@ -20,8 +20,9 @@
 		}
 	],
 	"docs": "http://www.benplum.com/formstone/scroller/",
+	"demo": "http://www.benplum.com/formstone/scroller/",
 	"download": "https://github.com/benplum/Scroller",
-	"bugs": "https://github.com/benplum/Boxer/Scroller",
+	"bugs": "https://github.com/benplum/Scroller/issues",
 	"dependencies": {
 		"jquery": ">=1.7"
 	}
