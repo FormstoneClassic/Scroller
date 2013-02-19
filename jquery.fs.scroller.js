@@ -1,7 +1,7 @@
 /*
  * Scroller Plugin [Formstone Library]
  * @author Ben Plum
- * @version 0.5.9
+ * @version 0.6.0
  *
  * Copyright © 2012 Ben Plum <mr@benplum.com>
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
@@ -24,23 +24,20 @@ if (jQuery) (function($) {
 		},
 		
 		destroy: function() {
-			var $items = $(this);
-			for (var i = 0, count = $items.length; i < count; i++) {
-				var data = $items.eq(i).data("scroller");
+			return $(this).each(function(i) {
+				var data = $(this).data("scroller");
 				if (data) {
-					data.$scrollbar.removeClass(data.customClass)
-								   .removeClass("scroller")
-								   .removeClass("scroller-active");
+					data.$scroller.removeClass(data.customClass)
+								  .removeClass("scroller")
+								  .removeClass("scroller-active");
 					data.$content.replaceWith(data.$content.html());
 					data.$bar.remove();
 					
 					data.$content.unbind("scroll", _onScroll);
-					data.$scrollbar.off(".scroller")
-								   .removeData("scroller");
+					data.$scroller.off(".scroller")
+								  .removeData("scroller");
 				}
-			}
-			
-			return $items;
+			});
 		},
 		
 		scroll: function(pos) {
@@ -70,13 +67,11 @@ if (jQuery) (function($) {
 		},
 		
 		reset: function(_data)  {
-			var $items = $(this);
-			var data;
-			for (var i = 0, count = $items.length; i < count; i++) {
-				data = _data || $items.eq(i).data("scroller");
+			return $(this).each(function(i) {
+				var data = _data || $(this).data("scroller");
 				
 				if (typeof data != "undefined") {
-					data.$scrollbar.addClass("scroller-setup");
+					data.$scroller.addClass("scroller-setup");
 					
 					if (data.horizontal == true) {
 						// Horizontal
@@ -93,22 +88,22 @@ if (jQuery) (function($) {
 							right: data.trackWidth - data.handleWidth
 						};
 						
-						data.$scrollbar.data("scroller", data);
+						data.$scroller.data("scroller", data);
 						data.$content.css({ paddingBottom: data.barHeight + data.paddingBottom });
 						
 						var scrollLeft = data.$content.scrollLeft();
 						var handleLeft = scrollLeft * data.ratio;
 						
 						if (data.scrollWidth <= data.frameWidth) {
-							data.$scrollbar.removeClass("scroller-active");
+							data.$scroller.removeClass("scroller-active");
 						} else {
-							data.$scrollbar.addClass("scroller-active");
+							data.$scroller.addClass("scroller-active");
 						}
 						
 						data.$bar.css({ width: data.frameWidth });
 						data.$track.css({ width: data.trackWidth, marginLeft: data.trackMargin, marginRight: data.trackMargin });
 						data.$handle.css({ width: data.handleWidth });
-						_position.apply(data.$scrollbar, [data, handleTop]);
+						_position.apply(data.$scroller, [data, handleTop]);
 					} else {
 						// Vertical
 						data.barWidth = data.$content[0].offsetWidth - data.$content[0].clientWidth;
@@ -124,76 +119,71 @@ if (jQuery) (function($) {
 							bottom: data.trackHeight - data.handleHeight
 						};
 						
-						data.$scrollbar.data("scroller", data);
+						data.$scroller.data("scroller", data);
 						
 						var scrollTop = data.$content.scrollTop();
 						var handleTop = scrollTop * data.ratio;
 						
 						if (data.scrollHeight <= data.frameHeight) {
-							data.$scrollbar.removeClass("scroller-active");
+							data.$scroller.removeClass("scroller-active");
 						} else {
-							data.$scrollbar.addClass("scroller-active");
+							data.$scroller.addClass("scroller-active");
 						}
 						
 						data.$bar.css({ height: data.frameHeight });
 						data.$track.css({ height: data.trackHeight, marginBottom: data.trackMargin, marginTop: data.trackMargin });
 						data.$handle.css({ height: data.handleHeight });
-						_position.apply(data.$scrollbar, [data, handleTop]);
+						_position.apply(data.$scroller, [data, handleTop]);
 					}
 					
-					data.$scrollbar.removeClass("scroller-setup");
+					data.$scroller.removeClass("scroller-setup");
 				}
-			}
-			
-			return $items;
+			});
 		}
 	}
 	
 	function _init(opts) {
-		var data = $.extend({}, options, opts || {});
+		var _data = $.extend({}, options, opts || {});
 		
-		var $items = $(this);
-		for (var i = 0, count = $items.length; i < count; i++) {
-			var $scrollbar = $items.eq(i);
+		return $(this).each(function(i) {
+			var $scroller = $(this);
 			
-			if (!$scrollbar.data("scroller")) {
+			if (!$scroller.data("scroller")) {
 				var html = '<div class="scroller-bar">';
 				html += '<div class="scroller-track">';
 				html += '<div class="scroller-handle">';
 				html += '</div></div></div>';
 				
-				data.paddingRight = parseInt($scrollbar.css("padding-right"), 10);
-				data.paddingBottom = parseInt($scrollbar.css("padding-bottom"), 10);
+				_data.paddingRight = parseInt($scroller.css("padding-right"), 10);
+				_data.paddingBottom = parseInt($scroller.css("padding-bottom"), 10);
 				
-				$scrollbar.addClass(data.customClass + " scroller")
-						  .wrapInner('<div class="scroller-content" />')
-						  .prepend(html);
+				$scroller.addClass(_data.customClass + " scroller")
+						 .wrapInner('<div class="scroller-content" />')
+						 .prepend(html);
 				
-				if (data.horizontal) {
-					$scrollbar.addClass("scroller-horizontal");
+				if (_data.horizontal) {
+					$scroller.addClass("scroller-horizontal");
 				}
 				
-				data = $.extend({
-					$scrollbar: $scrollbar,
-					$content: $scrollbar.find(".scroller-content"),
-					$bar: $scrollbar.find(".scroller-bar"),
-					$track: $scrollbar.find(".scroller-track"),
-					$handle: $scrollbar.find(".scroller-handle")
-				}, data);
+				var data = $.extend({
+					$scroller: $scroller,
+					$content: $scroller.find(".scroller-content"),
+					$bar: $scroller.find(".scroller-bar"),
+					$track: $scroller.find(".scroller-track"),
+					$handle: $scroller.find(".scroller-handle")
+				}, _data);
 				
 				data.$content.on("scroll.scroller", data, _onScroll);
-				data.$scrollbar.on("mousedown.scroller", ".scroller-track", data, _onTrackDown)
+				data.$scroller.on("mousedown.scroller", ".scroller-track", data, _onTrackDown)
 							   .on("mousedown.scroller", ".scroller-handle", data, _onHandleDown)
 							   .data("scroller", data);
 				
-				pub.reset.apply($scrollbar, [data]);
+				pub.reset.apply($scroller, [data]);
 				$(window).one("load", function() {
-					pub.reset.apply($scrollbar, [data]);
+					pub.reset.apply($scroller, [data]);
 				});
 			}
-		}
-		
-		return $items;
+		});
 	}
 	
 	function _onScroll(e) {
@@ -242,15 +232,15 @@ if (jQuery) (function($) {
 			// Horizontal
 			data.mouseStart = e.pageX;
 			data.handleLeft = e.pageX - offset.left - (data.handleWidth / 2);
-			_position.apply(data.$scrollbar, [data, data.handleLeft]);
+			_position.apply(data.$scroller, [data, data.handleLeft]);
 		} else {
 			// Vertical
 			data.mouseStart = e.pageY;
 			data.handleTop = e.pageY - offset.top - (data.handleHeight / 2);
-			_position.apply(data.$scrollbar, [data, data.handleTop]);
+			_position.apply(data.$scroller, [data, data.handleTop]);
 		}
 		
-		data.$scrollbar.data("scroller", data);
+		data.$scroller.data("scroller", data);
 		data.$content.off(".scroller");
 		$("body").on("mousemove.scroller", data, _onMouseMove)
 				 .on("mouseup.scroller", data, _onMouseUp);
@@ -272,7 +262,7 @@ if (jQuery) (function($) {
 			data.handleTop = parseInt(data.$handle.css("top"), 10);
 		}
 		
-		data.$scrollbar.data("scroller", data);
+		data.$scroller.data("scroller", data);
 		data.$content.off(".scroller");
 		$("body").on("mousemove.scroller", data, _onMouseMove)
 				 .on("mouseup.scroller", data, _onMouseUp);
@@ -295,7 +285,7 @@ if (jQuery) (function($) {
 			pos = data.handleTop - delta;
 		}
 		
-		_position.apply(data.$scrollbar, [data, pos]);
+		_position.apply(data.$scroller, [data, pos]);
 	}
 	
 	function _onMouseUp(e) {
