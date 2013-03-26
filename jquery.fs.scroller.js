@@ -1,9 +1,9 @@
 /*
  * Scroller Plugin [Formstone Library]
  * @author Ben Plum
- * @version 0.6.0
+ * @version 0.6.1
  *
- * Copyright © 2012 Ben Plum <mr@benplum.com>
+ * Copyright © 2013 Ben Plum <mr@benplum.com>
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
 
@@ -33,7 +33,7 @@ if (jQuery) (function($) {
 					data.$content.replaceWith(data.$content.html());
 					data.$bar.remove();
 					
-					data.$content.unbind("scroll", _onScroll);
+					data.$content.off(".scroller");
 					data.$scroller.off(".scroller")
 								  .removeData("scroller");
 				}
