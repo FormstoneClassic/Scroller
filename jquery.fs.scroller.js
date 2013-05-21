@@ -1,7 +1,7 @@
 /*
  * Scroller Plugin [Formstone Library]
  * @author Ben Plum
- * @version 0.6.1
+ * @version 0.6.2
  *
  * Copyright © 2013 Ben Plum <mr@benplum.com>
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
@@ -58,9 +58,11 @@ if (jQuery) (function($) {
 			}
 			
 			if (data.horizontal == true) {
-				data.$content.scrollLeft(pos);
+				//data.$content.scrollLeft(pos);
+				data.$content.animate({ scrollLeft: pos });
 			} else {
-				data.$content.scrollTop(pos);
+				//data.$content.scrollTop(pos);
+				data.$content.animate({ scrollTop: pos });
 			}
 			
 			return $(this);
