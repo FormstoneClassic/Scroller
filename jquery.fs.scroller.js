@@ -1,7 +1,7 @@
 /*
  * Scroller Plugin [Formstone Library]
  * @author Ben Plum
- * @version 0.6.2
+ * @version 0.6.3
  *
  * Copyright © 2013 Ben Plum <mr@benplum.com>
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
@@ -145,47 +145,57 @@ if (jQuery) (function($) {
 	}
 	
 	function _init(opts) {
-		var _data = $.extend({}, options, opts || {});
+		// Local options
+		opts = $.extend({}, options, opts || {});
 		
-		return $(this).each(function(i) {
-			var $scroller = $(this);
+		// Apply to each element
+		var $items = $(this);
+		for (var i = 0, count = $items.length; i < count; i++) {
+			_build($items.eq(i), opts);
+		}
+		return $items;
+	}
+	
+	// Build
+	function _build($scroller, opts) {
+		if (!$scroller.data("scroller")) {
+			// EXTEND OPTIONS
+			$.extend(opts, $scroller.data("scroller-options"));
 			
-			if (!$scroller.data("scroller")) {
-				var html = '<div class="scroller-bar">';
-				html += '<div class="scroller-track">';
-				html += '<div class="scroller-handle">';
-				html += '</div></div></div>';
-				
-				_data.paddingRight = parseInt($scroller.css("padding-right"), 10);
-				_data.paddingBottom = parseInt($scroller.css("padding-bottom"), 10);
-				
-				$scroller.addClass(_data.customClass + " scroller")
-						 .wrapInner('<div class="scroller-content" />')
-						 .prepend(html);
-				
-				if (_data.horizontal) {
-					$scroller.addClass("scroller-horizontal");
-				}
-				
-				var data = $.extend({
-					$scroller: $scroller,
-					$content: $scroller.find(".scroller-content"),
-					$bar: $scroller.find(".scroller-bar"),
-					$track: $scroller.find(".scroller-track"),
-					$handle: $scroller.find(".scroller-handle")
-				}, _data);
-				
-				data.$content.on("scroll.scroller", data, _onScroll);
-				data.$scroller.on("mousedown.scroller", ".scroller-track", data, _onTrackDown)
-							   .on("mousedown.scroller", ".scroller-handle", data, _onHandleDown)
-							   .data("scroller", data);
-				
-				pub.reset.apply($scroller, [data]);
-				$(window).one("load", function() {
-					pub.reset.apply($scroller, [data]);
-				});
+			var html = '<div class="scroller-bar">';
+			html += '<div class="scroller-track">';
+			html += '<div class="scroller-handle">';
+			html += '</div></div></div>';
+			
+			opts.paddingRight = parseInt($scroller.css("padding-right"), 10);
+			opts.paddingBottom = parseInt($scroller.css("padding-bottom"), 10);
+			
+			$scroller.addClass(opts.customClass + " scroller")
+					 .wrapInner('<div class="scroller-content" />')
+					 .prepend(html);
+			
+			if (opts.horizontal) {
+				$scroller.addClass("scroller-horizontal");
 			}
-		});
+			
+			opts = $.extend({
+				$scroller: $scroller,
+				$content: $scroller.find(".scroller-content"),
+				$bar: $scroller.find(".scroller-bar"),
+				$track: $scroller.find(".scroller-track"),
+				$handle: $scroller.find(".scroller-handle")
+			}, opts);
+			
+			opts.$content.on("scroll.scroller", opts, _onScroll);
+			opts.$scroller.on("mousedown.scroller", ".scroller-track", opts, _onTrackDown)
+						   .on("mousedown.scroller", ".scroller-handle", opts, _onHandleDown)
+						   .data("scroller", opts);
+			
+			pub.reset.apply($scroller, [opts]);
+			$(window).one("load", function() {
+				pub.reset.apply($scroller, [opts]);
+			});
+		}
 	}
 	
 	function _onScroll(e) {
