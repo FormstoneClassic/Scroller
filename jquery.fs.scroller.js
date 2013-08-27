@@ -1,7 +1,7 @@
 /*
  * Scroller Plugin [Formstone Library]
  * @author Ben Plum
- * @version 0.6.3
+ * @version 0.6.4
  *
  * Copyright © 2013 Ben Plum <mr@benplum.com>
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
@@ -11,9 +11,10 @@ if (jQuery) (function($) {
 	
 	var options = {
 		customClass: "",
-		trackMargin: 0,
+		duration: 0,
 		handleSize: false,
-		horizontal: false
+		horizontal: false,
+		trackMargin: 0
 	};
 	
 	var pub = {
@@ -41,32 +42,30 @@ if (jQuery) (function($) {
 		},
 		
 		scroll: function(pos, duration) {
-			var data = $(this).data("scroller"),
-                duration = duration != undefined ? duration : 400;
-			
-			if (typeof pos != "number") {
-				var $el = $(pos);
-				if ($el.length > 0) {
-					var offset = $el.position();
-					if (data.horizontal == true) {
-						pos = offset.left + data.$content.scrollLeft();
+			return $(this).each(function(i) {
+				var data = $(this).data("scroller"),
+	                duration = duration || options.duration;
+				
+				if (typeof pos != "number") {
+					var $el = $(pos);
+					if ($el.length > 0) {
+						var offset = $el.position();
+						if (data.horizontal == true) {
+							pos = offset.left + data.$content.scrollLeft();
+						} else {
+							pos = offset.top + data.$content.scrollTop();
+						}
 					} else {
-						pos = offset.top + data.$content.scrollTop();
+						pos = data.$content.scrollTop();
 					}
-				} else {
-					pos = data.$content.scrollTop();
 				}
-			}
-			
-			if (data.horizontal == true) {
-				//data.$content.scrollLeft(pos);
-				data.$content.dequeue().animate({ scrollLeft: pos }, duration);
-			} else {
-				//data.$content.scrollTop(pos);
-				data.$content.dequeue().animate({ scrollTop: pos }, duration);
-			}
-			
-			return $(this);
+				
+				if (data.horizontal == true) {
+					data.$content.stop().animate({ scrollLeft: pos }, duration);
+				} else {
+					data.$content.stop().animate({ scrollTop: pos }, duration);
+				}
+			});
 		},
 		
 		reset: function(_data)  {
