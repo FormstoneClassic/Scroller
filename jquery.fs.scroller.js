@@ -60,10 +60,10 @@ if (jQuery) (function($) {
 			
 			if (data.horizontal == true) {
 				//data.$content.scrollLeft(pos);
-				data.$content.animate({ scrollLeft: pos }, duration);
+				data.$content.dequeue().animate({ scrollLeft: pos }, duration);
 			} else {
 				//data.$content.scrollTop(pos);
-				data.$content.animate({ scrollTop: pos }, duration);
+				data.$content.dequeue().animate({ scrollTop: pos }, duration);
 			}
 			
 			return $(this);
@@ -350,4 +350,4 @@ if (jQuery) (function($) {
 		}
 		return this;
 	};
-})(jQuery);	
+})(jQuery);
