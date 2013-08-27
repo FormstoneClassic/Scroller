@@ -40,8 +40,9 @@ if (jQuery) (function($) {
 			});
 		},
 		
-		scroll: function(pos) {
-			var data = $(this).data("scroller");
+		scroll: function(pos, duration) {
+			var data = $(this).data("scroller"),
+                duration = duration != undefined ? duration : 400;
 			
 			if (typeof pos != "number") {
 				var $el = $(pos);
@@ -59,10 +60,10 @@ if (jQuery) (function($) {
 			
 			if (data.horizontal == true) {
 				//data.$content.scrollLeft(pos);
-				data.$content.animate({ scrollLeft: pos });
+				data.$content.dequeue().animate({ scrollLeft: pos }, duration);
 			} else {
 				//data.$content.scrollTop(pos);
-				data.$content.animate({ scrollTop: pos });
+				data.$content.dequeue().animate({ scrollTop: pos }, duration);
 			}
 			
 			return $(this);
@@ -349,4 +350,4 @@ if (jQuery) (function($) {
 		}
 		return this;
 	};
-})(jQuery);	
+})(jQuery);
