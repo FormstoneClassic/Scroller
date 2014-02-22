@@ -1,29 +1,12 @@
 {
-	"name": "Scroller",
-	"version": "0.6.4",
-	"description": "A jQuery plugin for replacing default browser scrollbars. Part of the formstone library.",
-	"keywords": [
-		"javascript",
-		"jquery",
-		"scrollbar",
-		"ui",
-		"formstone",
-		"benplum"
-	],
-	"authors": [
-		"Ben Plum"
-	],
-	"license": "MIT",
-	"homepage": "http://www.benplum.com/formstone/scroller/",
-	"main": [
-		"jquery.fs.scroller.css",
-		"jquery.fs.scroller.min.js"
-	],
-	"ignore": [
-		"*.json"
-	],
-	"dependencies": {
-		"jquery": ">= 1.7.0"
-	},
-	"devDependencies": {}
+  "name": "Scroller",
+  "version": "3.0.0",
+  "description": "A jQuery plugin for replacing default browser scrollbars. Part of the Formstone Library.",
+  "author": {
+    "name": "Ben Plum",
+    "email": "mr@benplum.com",
+    "url": "http://www.benplum.com"
+  },
+  "license": "MIT",
+  "homepage": "http://formstone.it/scroller/"
 }
