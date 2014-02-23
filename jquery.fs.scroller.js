@@ -1,5 +1,5 @@
 /* 
- * Scroller v3.0.1 - 2014-02-22 
+ * Scroller v3.0.2 - 2014-02-23 
  * A jQuery plugin for replacing default browser scrollbars. Part of the Formstone Library. 
  * http://formstone.it/scroller/ 
  * 
@@ -55,8 +55,9 @@
 					data.$scroller.removeClass(data.customClass)
 								  .removeClass("scroller")
 								  .removeClass("scroller-active");
-					data.$content.replaceWith(data.$content.html());
+
 					data.$bar.remove();
+					data.$content.contents().unwrap();
 
 					data.$content.off(".scroller");
 					data.$scroller.off(".scroller")
@@ -65,6 +66,14 @@
 			});
 		},
 
+		/**
+		 * @method
+		 * @name scroll
+		 * @description Scrolls instance of plugin to element or position
+		 * @param pos [string || int] <null> "Target element selector or static position"
+		 * @param duration [int] <null> "Optional scroll duration"
+		 * @example $.scroller("scroll", pos, duration);
+		 */
 		scroll: function(pos, duration) {
 			return $(this).each(function(i) {
 				var data = $(this).data("scroller"),
@@ -92,6 +101,12 @@
 			});
 		},
 
+		/**
+		 * @method
+		 * @name reset
+		 * @description Resets layout on instance of plugin
+		 * @example $.scroller("reset");
+		 */
 		reset: function()  {
 			return $(this).each(function(i) {
 				var data = $(this).data("scroller");
