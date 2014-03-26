@@ -254,8 +254,8 @@
 			data.trackMargin = parseInt(data.trackMargin, 10);
 
 			data.$content.on("scroll.scroller", data, _onScroll);
-			data.$scroller.on("mousedown.scroller", ".scroller-track", data, _onTrackDown)
-						  .on("mousedown.scroller", ".scroller-handle", data, _onHandleDown)
+			data.$scroller.on("touchstart.scroller mousedown.scroller", ".scroller-track", data, _onTrackDown)
+						  .on("touchstart.scroller mousedown.scroller", ".scroller-handle", data, _onHandleDown)
 						  .data("scroller", data);
 
 			pub.reset.apply($scroller);
@@ -318,28 +318,33 @@
 		e.stopPropagation();
 
 		var data = e.data,
-			offset = data.$track.offset();
+			oe = e.originalEvent,
+			offset = data.$track.offset(),
+			touch = (typeof oe.targetTouches !== "undefined") ? oe.targetTouches[0] : null;
+
+		var pageX = (touch) ? touch.pageX : e.clientX,
+			pageY = (touch) ? touch.pageY : e.clientY;
 
 		if (data.horizontal) {
 			// Horizontal
-			data.mouseStart = e.pageX;
-			data.handleLeft = e.pageX - offset.left - (data.handleWidth / 2);
+			data.mouseStart = pageX;
+			data.handleLeft = pageX - offset.left - (data.handleWidth / 2);
 			_position.apply(data.$scroller, [data, data.handleLeft]);
 		} else {
 			// Vertical
-			data.mouseStart = e.pageY;
-			data.handleTop = e.pageY - offset.top - (data.handleHeight / 2);
+			data.mouseStart = pageY;
+			data.handleTop  = pageY - offset.top - (data.handleHeight / 2);
 			_position.apply(data.$scroller, [data, data.handleTop]);
 		}
 
 		data.$content.off(".scroller");
-		$body.on("mousemove.scroller", data, _onMouseMove)
-			 .on("mouseup.scroller", data, _onMouseUp);
+		$body.on("touchmove.scroller mousemove.scroller", data, _onMouseMove)
+			 .on("touchend.scroller mouseup.scroller", data, _onMouseUp);
 	}
 
 	/**
 	 * @method private
-	 * @name _onTrackDown
+	 * @name _onHandleDown
 	 * @description Handles mousedown event on handle
 	 * @param e [object] "Event data"
 	 */
@@ -347,21 +352,26 @@
 		e.preventDefault();
 		e.stopPropagation();
 
-		var data = e.data;
+		var data = e.data,
+			oe = e.originalEvent,
+			touch = (typeof oe.targetTouches !== "undefined") ? oe.targetTouches[0] : null;
+
+		var pageX = (touch) ? touch.pageX : e.clientX,
+			pageY = (touch) ? touch.pageY : e.clientY;
 
 		if (data.horizontal) {
 			// Horizontal
-			data.mouseStart = e.pageX;
+			data.mouseStart = pageX;
 			data.handleLeft = parseInt(data.$handle.css("left"), 10);
 		} else {
 			// Vertical
-			data.mouseStart = e.pageY;
+			data.mouseStart = pageY;
 			data.handleTop = parseInt(data.$handle.css("top"), 10);
 		}
 
 		data.$content.off(".scroller");
-		$body.on("mousemove.scroller", data, _onMouseMove)
-			 .on("mouseup.scroller", data, _onMouseUp);
+		$body.on("touchmove.scroller mousemove.scroller", data, _onMouseMove)
+			 .on("touchend.scroller mouseup.scroller", data, _onMouseUp);
 	}
 
 	/**
@@ -375,16 +385,21 @@
 		e.stopPropagation();
 
 		var data = e.data,
+			oe = e.originalEvent,
 			pos = 0,
-			delta = 0;
+			delta = 0,
+			touch = (typeof oe.targetTouches !== "undefined") ? oe.targetTouches[0] : null;
+
+		var pageX = (touch) ? touch.pageX : e.clientX,
+			pageY = (touch) ? touch.pageY : e.clientY;
 
 		if (data.horizontal) {
 			// Horizontal
-			delta = data.mouseStart - e.pageX;
+			delta = data.mouseStart - pageX;
 			pos = data.handleLeft - delta;
 		} else {
 			// Vertical
-			delta = data.mouseStart - e.pageY;
+			delta = data.mouseStart - pageY;
 			pos = data.handleTop - delta;
 		}
 
@@ -398,6 +413,22 @@
 	 * @param e [object] "Event data"
 	 */
 	function _onMouseUp(e) {
+		e.preventDefault();
+		e.stopPropagation();
+
+		var data = e.data;
+
+		data.$content.on("scroll.scroller", data, _onScroll);
+		$body.off(".scroller");
+	}
+
+	/**
+	 * @method private
+	 * @name _onTouchEnd
+	 * @description Handles mouseup event
+	 * @param e [object] "Event data"
+	 */
+	function _onTouchEnd(e) {
 		e.preventDefault();
 		e.stopPropagation();
 

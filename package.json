@@ -2,7 +2,7 @@
   "name": "Scroller",
   "id": "scroller",
   "codename": "jquery.fs.scroller",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "A jQuery plugin for replacing default browser scrollbars. Part of the Formstone Library.",
   "keywords": [
   	"scroll",

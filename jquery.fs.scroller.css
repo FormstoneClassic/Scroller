@@ -1,5 +1,5 @@
 /* 
- * Scroller v3.0.2 - 2014-02-23 
+ * Scroller v3.0.3 - 2014-03-26 
  * A jQuery plugin for replacing default browser scrollbars. Part of the Formstone Library. 
  * http://formstone.it/scroller/ 
  * 
@@ -7,7 +7,9 @@
  */ 
 
 	.scroller { overflow: hidden; overflow-x: hidden; overflow-y: hidden; position: relative; }
-	.scroller-content { height: 100%; overflow: auto; overflow-x: hidden; overflow-y: auto; position: relative; z-index: 1; }
+	.scroller-content { height: 100%; overflow: auto; overflow-x: hidden; overflow-y: auto; position: relative; z-index: 1;
+		-webkit-overflow-scrolling: touch;
+	}
 	.scroller-bar { background: #FBFBFB; border-left: 1px solid #EEEEEE; display: none; height: 100%; position: absolute; right: 0; top: 0; width: 20px; z-index: 2; }
 	.scroller-track { background: #FBFBFB; height: 100%; overflow: hidden; position: relative; width: 100%; }
 	.scroller-handle { background: #EEEEEE; border: 1px solid #D5D5D5; border-radius: 5px; cursor: pointer; height: 20px; overflow: hidden; position: absolute; right: 5px; top: 0; width: 10px; z-index: 2;

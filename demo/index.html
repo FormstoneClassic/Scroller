@@ -15,7 +15,7 @@
 		<script src="http://formstone.it/js/demo.js"></script>
 
 		<link href="../jquery.fs.scroller.css" rel="stylesheet" type="text/css" media="all" />
-		<script src="../jquery.fs.scroller.js"></script>
+		<script src="../src/jquery.fs.scroller.js"></script>
 
 		<style>
 			.scrollbar { background: #fefefe; border: 1px solid #eee; height: 200px; overflow: auto; margin: 20px 0 0; padding: 10px 20px 10px 20px; }
@@ -79,10 +79,11 @@
 			<div class="mobile-full tablet-full desktop-8 desktop-push-2">
 				<header class="header">
 					<h1>Scroller Demo</h1>
-					<br />
+					<br>
 					<a href="http://formstone.it/scroller/" class="button">View Documentation</a>
 				</header>
 
+				<!-- BASIC -->
 				<h3>Basic</h3>
 				<p>The most basic method is simply applying the scroller plugin:</p>
 
@@ -97,8 +98,9 @@
 					<p>Suspendisse eu nibh in libero euismod condimentum eget nec enim. Suspendisse nec ligula nec augue tristique semper sed suscipit erat. Integer et nunc a augue pellentesque fringilla. Nullam leo ligula, mattis id pretium ac, suscipit sed nunc. Duis ac lorem nec velit malesuada tempus hendrerit ut metus. Quisque a lacus vel lectus rhoncus luctus. Aliquam ornare, nunc sit amet porttitor ornare, libero lectus congue enim, vitae tincidunt sapien justo et ligula. Proin vestibulum blandit fringilla. </p>
 				</div>
 
-				<br />
+				<br>
 
+				<!-- ADVANCED -->
 				<h3>Advanced</h3>
 				<p>Customize a specific Scroller instance:</p>
 
@@ -117,8 +119,9 @@
 					<p>Suspendisse eu nibh in libero euismod condimentum eget nec enim. Suspendisse nec ligula nec augue tristique semper sed suscipit erat. Integer et nunc a augue pellentesque fringilla. Nullam leo ligula, mattis id pretium ac, suscipit sed nunc. Duis ac lorem nec velit malesuada tempus hendrerit ut metus. Quisque a lacus vel lectus rhoncus luctus. Aliquam ornare, nunc sit amet porttitor ornare, libero lectus congue enim, vitae tincidunt sapien justo et ligula. Proin vestibulum blandit fringilla. </p>
 				</div>
 
-				<br />
+				<br>
 
+				<!-- HORIZONTAL -->
 				<h3>Horizontal</h3>
 				<p>Add a horizontal scrollbar to a content element:</p>
 
@@ -137,38 +140,36 @@
 					</div>
 				</div>
 
-				<br />
+				<br>
 
+				<!-- RESET -->
 				<h3>Reset</h3>
 				<p>After appending content, you will need to call the reset method on the target element:</p>
 
 				<pre class="example"><code class="language-javascript">$(".scrollbar").scroller("reset");</code></pre>
 
 				<h5>Demo</h5>
-
 				<div class="clear_fix">
 					<a href="#" class="reset_click button small">Append Content</a>
 				</div>
-
 				<div class="scrollbar_reset scrollbar">
 					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
 				</div>
 
-				<br />
+				<br>
 
+				<!-- SCROLL -->
 				<h3>Scroll</h3>
 				<p>Manually scroll an instance to a specific pixel value or selector:</p>
 
 				<pre class="example"><code class="language-javascript">$(".scrollbar").scroller("scroll", [value | selector]);</code></pre>
 
 				<h5>Demo</h5>
-
 				<div class="clear_fix">
 					<a href="#" class="scroll_top button small">Scroll to "0px"</a>
 					<a href="#" class="scroll_mid button small">Scroll to "200px"</a>
 					<a href="#scroll_target" class="scroll_target button small">Scroll to "#scroll_target"</a>
 				</div>
-
 				<div class="scrollbar_scroll scrollbar">
 					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla porta aliquet gravida. Aenean pulvinar blandit orci vel fermentum. Phasellus viverra pulvinar viverra. Quisque et sagittis ante. Nulla sem neque, fermentum at laoreet vel, rhoncus sit amet nisl. Donec consectetur urna ac massa placerat ac pharetra sem mollis. Integer nibh urna, placerat vel placerat in, tempor at nisi. Aenean rutrum, enim sit amet rutrum fermentum, magna justo volutpat massa, lacinia adipiscing nisl magna eget nibh. In auctor, nibh eget faucibus tristique, arcu turpis molestie orci, placerat suscipit diam nibh et erat. Curabitur tempus lectus quis odio ornare porta.</p>
 					<p>Aenean odio libero, eleifend eu luctus quis, accumsan ac risus. Mauris egestas bibendum tortor vel semper. Ut egestas, erat ut rutrum tempus, massa erat commodo arcu, id congue justo odio ac erat. Quisque non purus et nunc consequat scelerisque. Vestibulum vitae tristique dolor. Suspendisse ac quam interdum libero euismod tempus. Sed a ante justo, varius commodo urna.</p>
