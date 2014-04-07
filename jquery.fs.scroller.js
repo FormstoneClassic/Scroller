@@ -1,5 +1,5 @@
 /* 
- * Scroller v3.0.3 - 2014-03-26 
+ * Scroller v3.0.3 - 2014-04-07 
  * A jQuery plugin for replacing default browser scrollbars. Part of the Formstone Library. 
  * http://formstone.it/scroller/ 
  * 
@@ -74,10 +74,10 @@
 		 * @param duration [int] <null> "Optional scroll duration"
 		 * @example $.scroller("scroll", pos, duration);
 		 */
-		scroll: function(pos, duration) {
+		scroll: function(pos, dur) {
 			return $(this).each(function(i) {
 				var data = $(this).data("scroller"),
-	                duration = duration || options.duration;
+	                duration = dur || options.duration;
 
 				if (typeof pos !== "number") {
 					var $el = $(pos);
