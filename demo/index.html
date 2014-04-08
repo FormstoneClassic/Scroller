@@ -64,6 +64,11 @@
 					e.stopPropagation();
 					$(".scrollbar_scroll").scroller("scroll", $(this).attr("href"));
 				});
+                $(".scroll_animate").on("click", function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    $(".scrollbar_scroll").scroller("scroll", 300, 500);
+                });
 			});
 		</script>
 	</head>
@@ -169,6 +174,7 @@
 					<a href="#" class="scroll_top button small">Scroll to "0px"</a>
 					<a href="#" class="scroll_mid button small">Scroll to "200px"</a>
 					<a href="#scroll_target" class="scroll_target button small">Scroll to "#scroll_target"</a>
+                    <a href="#" class="scroll_animate button small">Animate scroll to "300px" in 500ms</a>
 				</div>
 				<div class="scrollbar_scroll scrollbar">
 					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla porta aliquet gravida. Aenean pulvinar blandit orci vel fermentum. Phasellus viverra pulvinar viverra. Quisque et sagittis ante. Nulla sem neque, fermentum at laoreet vel, rhoncus sit amet nisl. Donec consectetur urna ac massa placerat ac pharetra sem mollis. Integer nibh urna, placerat vel placerat in, tempor at nisi. Aenean rutrum, enim sit amet rutrum fermentum, magna justo volutpat massa, lacinia adipiscing nisl magna eget nibh. In auctor, nibh eget faucibus tristique, arcu turpis molestie orci, placerat suscipit diam nibh et erat. Curabitur tempus lectus quis odio ornare porta.</p>
