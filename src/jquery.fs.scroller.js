@@ -69,22 +69,22 @@
 		scroll: function(pos, dur) {
 			return $(this).each(function(i) {
 				var data = $(this).data("scroller"),
-	                duration = dur || options.duration;
-
-				if (typeof pos !== "number") {
-					var $el = $(pos);
-					if ($el.length > 0) {
-						var offset = $el.position();
-						if (data.horizontal) {
-							pos = offset.left + data.$content.scrollLeft();
+					duration = dur || options.duration;
+				if (data){
+					if (typeof pos !== "number") {
+						var $el = $(pos);
+						if ($el.length > 0) {
+							var offset = $el.position();
+							if (data.horizontal) {
+								pos = offset.left + data.$content.scrollLeft();
+							} else {
+								pos = offset.top + data.$content.scrollTop();
+							}
 						} else {
-							pos = offset.top + data.$content.scrollTop();
+							pos = data.$content.scrollTop();
 						}
-					} else {
-						pos = data.$content.scrollTop();
 					}
 				}
-
 				if (data.horizontal) {
 					data.$content.stop().animate({ scrollLeft: pos }, duration);
 				} else {
