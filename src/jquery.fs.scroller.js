@@ -471,7 +471,10 @@
 			var scrollTop = Math.round(pos * data.scrollRatio);
 
 			data.$handle.css({ top: pos });
-			data.$content.scrollTop( scrollTop );
+
+			if (!isNaN(scrollTop)) {
+				data.$content.scrollTop( scrollTop );
+			}
 		}
 	}
 
