@@ -16,7 +16,8 @@
 		duration: 0,
 		handleSize: 0,
 		horizontal: false,
-		trackMargin: 0
+		trackMargin: 0,
+		callBack: 'scrolling'
 	};
 
 	var pub = {
@@ -277,6 +278,9 @@
 		e.stopPropagation();
 
 		var data = e.data;
+
+		data.sT = data.$content.scrollTop();
+		data.$content.trigger(options.callBack);
 
 		if (data.horizontal) {
 			// Horizontal
