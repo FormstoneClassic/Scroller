@@ -2,7 +2,7 @@
   "name": "Scroller",
   "id": "scroller",
   "codename": "jquery.fs.scroller",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "description": "A jQuery plugin for replacing default browser scrollbars. Part of the Formstone Library.",
   "keywords": [
   	"scroll",
@@ -10,12 +10,11 @@
 	"ui",
 	"javascript",
   	"jquery",
-	"formstone",
-	"benplum"
+	"formstone"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/benplum/Scroller"
+    "url": "https://github.com/Formstone/Scroller"
   },
   "homepage": "http://formstone.it/scroller/",
   "demo": "http://formstone.it/components/Scroller/demo/index.html",

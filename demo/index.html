@@ -2,40 +2,41 @@
 <html lang="en">
 	<head>
 		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-		<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
 
 		<title>Scroller Demo</title>
 
-		<link href="http://formstone.it/css/demo.css" rel="stylesheet" type="text/css" media="all" />
+		<link href="http://formstone.it/css/demo.css" rel="stylesheet" type="text/css" media="all">
 
 		<!--[if LTE IE 8]>
-			<link href="http://formstone.it/css/demo.ie.css" rel="stylesheet" type="text/css" media="all" />
+			<link href="http://formstone.it/css/demo.ie.css" rel="stylesheet" type="text/css" media="all">
 		<![endif]-->
 
 		<script src="http://formstone.it/js/demo.js"></script>
 
-		<link href="../jquery.fs.scroller.css" rel="stylesheet" type="text/css" media="all" />
+		<link href="../jquery.fs.scroller.css" rel="stylesheet" type="text/css" media="all">
 		<script src="../jquery.fs.scroller.js"></script>
 
+		<!--[DEMO:START-RESOURCES]-->
+
 		<style>
-			.scrollbar { background: #fefefe; border: 1px solid #eee; height: 200px; overflow: auto; margin: 20px 0 0; padding: 10px 20px 10px 20px; }
-			.scrollbar.scroller { padding: 0; }
-			.scrollbar.scroller .scroller-content,
-			.scrollbar.scroller-active .scroller-content { padding: 20px 40px 20px 20px; }
+			.demo .scrollbar { background: #fefefe; border: 1px solid #eee; height: 200px; overflow: auto; margin: 20px 0 0; padding: 10px 20px 10px 20px; }
+			.demo .scrollbar.scroller { padding: 0; }
+			.demo .scrollbar.scroller .scroller-content,
+			.demo .scrollbar.scroller-active .scroller-content { padding: 20px 40px 20px 20px; }
 
-			.scroller p { margin: 0 0 20px; }
+			.demo .scroller p { margin: 0 0 20px; }
 
-			.scrollbar.horizontal { height: 320px; padding: 0; }
-			.wide_load { width: 2400px; overflow: hidden; padding: 20px 0 20px 20px; }
-			.wide_load p { float: left; margin: 0 25px 0 0; width: 450px; }
+			.demo .scrollbar.horizontal { height: 320px; padding: 0; }
+			.demo .wide_load { width: 2400px; overflow: hidden; padding: 20px 0 20px 20px; }
+			.demo .wide_load p { float: left; margin: 0 25px 0 0; width: 450px; }
 
-			.advanced .scroller-handle { background: #DB0209; border-color: rgba(0,0,0, 0.25); border-radius: 3px; right: 2px; width: 15px; }
+			.demo .advanced .scroller-handle { background: #DB0209; border-color: rgba(0,0,0, 0.25); border-radius: 3px; right: 2px; width: 15px; }
 		</style>
 
 		<script>
 			$(document).ready(function() {
-				$(window).on("snap", function() {
-					console.log('snap');
+				$(window).on("snap.demo", function() {
 					$(".scrollbar").scroller("reset");
 				});
 
@@ -69,8 +70,20 @@
                     e.stopPropagation();
                     $(".scrollbar_scroll").scroller("scroll", 300, 500);
                 });
+
+                $(window).one("pronto.load", function() {
+					$(window).off("snap.demo");
+					$(".reset_click").off("click");
+					$(".scroll_top").off("click");
+					$(".scroll_mid").off("click");
+					$(".scroll_target").off("click");
+	                $(".scroll_animate").off("click");
+				});
 			});
 		</script>
+
+		<!--[DEMO:END-RESOURCES]-->
+
 	</head>
 	<body class="gridlock demo">
 		<header id="header">
@@ -87,6 +100,8 @@
 					<br>
 					<a href="http://formstone.it/scroller/" class="button">View Documentation</a>
 				</header>
+
+				<!--[DEMO:START-CONTENT]-->
 
 				<!-- BASIC -->
 				<h3>Basic</h3>
@@ -183,6 +198,8 @@
 					<p id="scroll_target">Curabitur ullamcorper, nisi quis convallis luctus, nunc nisi mollis felis, eu mattis nunc sapien sed sapien. Vestibulum in nisi mauris, mattis sagittis lacus. Pellentesque in sem augue, a blandit augue. Aliquam bibendum diam ac erat imperdiet vestibulum. Vivamus dignissim, quam in feugiat scelerisque, enim risus interdum turpis, in vehicula ante lorem eu erat. Mauris ac turpis luctus libero pulvinar ultricies. Praesent porttitor nulla non risus porta consequat. Nunc vulputate porta nulla non ultrices. Donec et magna eu nisl elementum scelerisque. Curabitur in vehicula dui.</p>
 					<p>Suspendisse eu nibh in libero euismod condimentum eget nec enim. Suspendisse nec ligula nec augue tristique semper sed suscipit erat. Integer et nunc a augue pellentesque fringilla. Nullam leo ligula, mattis id pretium ac, suscipit sed nunc. Duis ac lorem nec velit malesuada tempus hendrerit ut metus. Quisque a lacus vel lectus rhoncus luctus. Aliquam ornare, nunc sit amet porttitor ornare, libero lectus congue enim, vitae tincidunt sapien justo et ligula. Proin vestibulum blandit fringilla. </p>
 				</div>
+
+				<!--[DEMO:END-CONTENT]-->
 
 			</div>
 		</article>

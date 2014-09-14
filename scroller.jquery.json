@@ -1,6 +1,6 @@
 {
   "name": "scroller",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "title": "Scroller",
   "author": {
     "name": "Ben Plum",
@@ -23,12 +23,11 @@
     "ui",
     "javascript",
     "jquery",
-    "formstone",
-    "benplum"
+    "formstone"
   ],
   "docs": "http://formstone.it/scroller/",
   "demo": "http://formstone.it/scroller/",
-  "download": "https://github.com/benplum/Scroller",
-  "bugs": "https://github.com/benplum/Scroller/issues",
+  "download": "https://github.com/Formstone/Scroller",
+  "bugs": "https://github.com/Formstone/Scroller/issues",
   "homepage": "http://formstone.it/scroller/"
 }
