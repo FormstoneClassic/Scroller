@@ -1,43 +1,107 @@
 /* 
- * Scroller v3.0.5 - 2014-09-14 
+ * Scroller v3.1.0 - 2014-10-27 
  * A jQuery plugin for replacing default browser scrollbars. Part of the Formstone Library. 
  * http://formstone.it/scroller/ 
  * 
  * Copyright 2014 Ben Plum; MIT Licensed 
- */ 
+ */
 
-	.scroller { overflow: hidden; overflow-x: hidden; overflow-y: hidden; position: relative; }
-	.scroller-content { height: 100%; overflow: auto; overflow-x: hidden; overflow-y: auto; position: relative; z-index: 1;
-		-webkit-overflow-scrolling: touch;
-	}
-	.scroller-bar { background: #FBFBFB; border-left: 1px solid #EEEEEE; display: none; height: 100%; position: absolute; right: 0; top: 0; width: 20px; z-index: 2; }
-	.scroller-track { background: #FBFBFB; height: 100%; overflow: hidden; position: relative; width: 100%; }
-	.scroller-handle { background: #EEEEEE; border: 1px solid #D5D5D5; border-radius: 5px; cursor: pointer; height: 20px; overflow: hidden; position: absolute; right: 5px; top: 0; width: 10px; z-index: 2;
-		-webkit-transition: right 0.1s linear, width 0.1s linear;
-		   -moz-transition: right 0.1s linear, width 0.1s linear;
-		   	-ms-transition: right 0.1s linear, width 0.1s linear;
-		   	 -o-transition: right 0.1s linear, width 0.1s linear;
-		   	 	transition: right 0.1s linear, width 0.1s linear;
-	}
 
-	/* Webkit Fix */
-	.scroller-content::-webkit-scrollbar,
-	.scroller-content::-webkit-scrollbar-button,
-	.scroller-content::-webkit-scrollbar-track,
-	.scroller-content::-webkit-scrollbar-track-piece,
-	.scroller-content::-webkit-scrollbar-thumb,
-	.scroller-content::-webkit-scrollbar-corner,
-	.scroller-content::-webkit-resizer { background: transparent; opacity: 0; }
-
-	/* Active Scrollbar */
-	.scroller-active .scroller-content { padding: 20px; }
-	.scroller-active .scroller-bar { display: block; }
-
-	/* Setup Scrollbar - Should match 'active' styles for proper sizing */
-	.scroller-active .scroller-content { padding: 20px; }
-	.scroller-active .scroller-bar { display: block; }
-
-	/* Horizontal */
-	.scroller-horizontal .scroller-content { overflow: auto; overflow-x: auto; overflow-y: hidden; padding: 0 0 10px 0; }
-	.scroller-horizontal .scroller-bar { border-left: none; border-top: 1px solid #EEEEEE; bottom: 0; height: 20px; top: auto; width: 100%; }
-	.scroller-horizontal .scroller-handle { bottom: 5px; height: 10px; right: auto; top: auto; width: 20px; }
+.scroller {
+  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  position: relative;
+}
+.scroller,
+.scroller * {
+  -webkit-user-select: none !important;
+     -moz-user-select: none !important;
+      -ms-user-select: none !important;
+          user-select: none !important;
+}
+.scroller,
+.scroller-content,
+.scroller-bar,
+.scroller-track,
+.scroller-handle {
+  box-sizing: border-box;
+}
+.scroller-content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.scroller-content::-webkit-scrollbar,
+.scroller-content::-webkit-scrollbar-button,
+.scroller-content::-webkit-scrollbar-track,
+.scroller-content::-webkit-scrollbar-track-piece,
+.scroller-content::-webkit-scrollbar-thumb,
+.scroller-content::-webkit-scrollbar-corner,
+.scroller-content::-webkit-resizer {
+  background: transparent;
+  opacity: 0;
+}
+.scroller-bar {
+  width: 16px;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 2;
+  background: #ffffff;
+  border: 1px solid #eeeeee;
+  border-width: 0 0 0 1px;
+  display: none;
+}
+.scroller-track {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: #ffffff;
+  overflow: hidden;
+}
+.scroller-handle {
+  width: 10px;
+  height: 20px;
+  position: absolute;
+  top: 0;
+  right: 3px;
+  z-index: 2;
+  background: #cccccc;
+  border: 1px solid #ffffff;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.scroller-horizontal .scroller-content {
+  overflow: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0 0 16px 0;
+}
+.scroller-horizontal .scroller-bar {
+  width: 100%;
+  height: 16px;
+  top: auto;
+  bottom: 0;
+  border-width: 1px 0 0 0;
+}
+.scroller-horizontal .scroller-handle {
+  width: 20px;
+  height: 10px;
+  top: auto;
+  right: auto;
+  bottom: 3px;
+}
+.scroller-setup .scroller-content,
+.scroller-active .scroller-content {
+  padding: 20px;
+}
+.scroller-setup .scroller-bar,
+.scroller-active .scroller-bar {
+  display: block;
+}

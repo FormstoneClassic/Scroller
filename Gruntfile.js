@@ -1,4 +1,7 @@
 /*global module:false*/
+
+// Less
+
 module.exports = function(grunt) {
 
 	grunt.initConfig({
@@ -10,7 +13,7 @@ module.exports = function(grunt) {
 					' * <%= pkg.homepage %> \n' +
 					' * \n' +
 					' * Copyright <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>; <%= pkg.license %> Licensed \n' +
-					' */ \n\n'
+					' */\n'
 		},
 		// JS Hint
 		jshint: {
@@ -34,31 +37,24 @@ module.exports = function(grunt) {
 				undef:     true,
 				validthis: true
 			},
-			files: ['src/<%= pkg.codename %>.js']
+			files: [
+				'src/<%= pkg.codename %>.js'
+			]
 		},
-		// Concat
-		concat: {
-			js: {
-				options: {
-					banner: '<%= meta.banner %>'
-				},
-				files: {
-					'<%= pkg.codename %>.js': [ 'src/<%= pkg.codename %>.js' ]
-				}
-			},
-			css: {
-				options: {
-					banner: '<%= meta.banner %>'
-				},
-				files: {
-					'<%= pkg.codename %>.css': [ 'src/<%= pkg.codename %>.css' ]
-				}
+		// Copy
+		copy: {
+			main: {
+				files: [
+					{
+						src: 'src/<%= pkg.codename %>.js',
+						dest: '<%= pkg.codename %>.js'
+					}
+				]
 			}
 		},
 		// Uglify
 		uglify: {
 			options: {
-				banner: '<%= meta.banner %>',
 				report: 'min'
 			},
 			target: {
@@ -85,7 +81,54 @@ module.exports = function(grunt) {
 				}
 			}
 		},
-		//Bower sync
+		// LESS
+		less: {
+			main: {
+				files: {
+					'<%= pkg.codename %>.css': [
+						'src/<%= pkg.codename %>-config.less',
+						'src/<%= pkg.codename %>.less'
+					]
+				}
+			},
+			min: {
+				options: {
+					report: 'min',
+					cleancss: true
+				},
+				files: {
+					'<%= pkg.codename %>.min.css': [
+						'src/<%= pkg.codename %>-config.less',
+						'src/<%= pkg.codename %>.less'
+					]
+				}
+			}
+		},
+		// Auto Prefixer
+		autoprefixer: {
+			options: {
+				browsers: [ '> 1%', 'last 5 versions', 'Firefox ESR', 'Opera 12.1', 'IE 8', 'IE 9' ]
+			},
+			no_dest: {
+				 src: '*.css'
+			}
+		},
+		// Banner
+		usebanner: {
+			options: {
+				position: 'top',
+				banner: '<%= meta.banner %>'
+			},
+			files: {
+				src: [
+					'<%= pkg.codename %>.css',
+					'<%= pkg.codename %>.js',
+					'<%= pkg.codename %>.min.css',
+					'<%= pkg.codename %>.min.js'
+				]
+			}
+		},
+		// Bower sync
 		sync: {
 			all: {
 				options: {
@@ -95,16 +138,49 @@ module.exports = function(grunt) {
 							'<%= pkg.codename %>.js',
 							'<%= pkg.codename %>.css'
 						],
-						ignore: [ "*.jquery.json", "Gruntfile.js", "src/" ]
+						ignore: [ "*.jquery.json" ]
 					}
 				}
+			}
+		},
+		// Watcher - For dev only!!
+		watch: {
+			scripts: {
+				files: [
+					'src/**.js'
+				],
+				tasks: [
+					'jshint',
+					'copy'
+				]
+			},
+			styles: {
+				files: [
+					'src/**.less'
+				],
+				tasks: [
+					'less',
+					'autoprefixer'
+				]
 			}
 		}
 	});
 
+	// Load tasks
+	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks('grunt-contrib-jshint');
+	grunt.loadNpmTasks('grunt-contrib-copy');
+	grunt.loadNpmTasks('grunt-contrib-uglify');
+	grunt.loadNpmTasks('grunt-jquerymanifest');
+	grunt.loadNpmTasks('grunt-contrib-less');
+	grunt.loadNpmTasks('grunt-autoprefixer');
+	grunt.loadNpmTasks('grunt-banner');
+	grunt.loadNpmTasks('grunt-npm2bower-sync');
+
 	// Readme
 	grunt.registerTask('buildReadme', 'Build Formstone README.md file.', function () {
 		var pkg = grunt.file.readJSON('package.json'),
+			extra = grunt.file.exists('src/README.md') ? '\n\n---\n\n' + grunt.file.read('src/README.md') : '';
 			destination = "README.md",
 			markdown = '<a href="http://gruntjs.com" target="_blank"><img src="https://cdn.gruntjs.com/builtwith.png" alt="Built with Grunt"></a> \n' +
 					   '# ' + pkg.name + ' \n\n' +
@@ -112,20 +188,14 @@ module.exports = function(grunt) {
 					   '- [Demo](' + pkg.demo + ') \n' +
 					   '- [Documentation](' + pkg.homepage + ') \n\n' +
 					   '#### Bower Support \n' +
-					   '`bower install ' + pkg.name + '`';
+					   '`bower install ' + pkg.name + '` ' +
+					   extra;
 
 		grunt.file.write(destination, markdown);
 		grunt.log.writeln('File "' + destination + '" created.');
 	});
 
-	// Load tasks
-	grunt.loadNpmTasks('grunt-contrib-jshint');
-	grunt.loadNpmTasks('grunt-contrib-concat');
-	grunt.loadNpmTasks('grunt-contrib-uglify');
-	grunt.loadNpmTasks('grunt-jquerymanifest');
-	grunt.loadNpmTasks('grunt-npm2bower-sync');
-
 	// Default task.
-	grunt.registerTask('default', [ 'jshint', 'concat', 'uglify', 'jquerymanifest', 'sync', 'buildReadme' ]);
+	grunt.registerTask('default', [ 'jshint', 'copy', 'uglify', 'jquerymanifest', 'less', 'autoprefixer', 'usebanner', 'sync', 'buildReadme' ]);
 
 };

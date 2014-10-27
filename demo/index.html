@@ -20,7 +20,7 @@
 		<!--[DEMO:START-RESOURCES]-->
 
 		<style>
-			.demo .scrollbar { background: #fefefe; border: 1px solid #eee; height: 200px; overflow: auto; margin: 20px 0 0; padding: 10px 20px 10px 20px; }
+			.demo .scrollbar { border: 1px solid #eee; height: 200px; overflow: auto; margin: 20px 0 0; padding: 10px 20px 10px 20px; }
 			.demo .scrollbar.scroller { padding: 0; }
 			.demo .scrollbar.scroller .scroller-content,
 			.demo .scrollbar.scroller-active .scroller-content { padding: 20px 40px 20px 20px; }
@@ -31,54 +31,60 @@
 			.demo .wide_load { width: 2400px; overflow: hidden; padding: 20px 0 20px 20px; }
 			.demo .wide_load p { float: left; margin: 0 25px 0 0; width: 450px; }
 
-			.demo .advanced .scroller-handle { background: #DB0209; border-color: rgba(0,0,0, 0.25); border-radius: 3px; right: 2px; width: 15px; }
+			.demo .advanced .scroller-handle { background: #900; border: none; border-radius: 0; right: 0; width: 100%; }
 		</style>
 
 		<script>
 			$(document).ready(function() {
-				$(window).on("snap.demo", function() {
-					$(".scrollbar").scroller("reset");
+				$(window).on("snap.demo", function(e, data) {
+					$(".demo .scrollbar").scroller("reset");
 				});
 
-				$(".scrollbar").scroller();
+				$(".demo .scrollbar").scroller();
 
 				// Reset
-				$(".reset_click").on("click", function() {
+				$(".demo .reset_click").on("click", function() {
 					$(".scrollbar_reset .scroller-content").append("<p>Suspendisse eu nibh in libero euismod condimentum eget nec enim. Suspendisse nec ligula nec augue tristique semper sed suscipit erat. Integer et nunc a augue pellentesque fringilla. Nullam leo ligula, mattis id pretium ac, suscipit sed nunc. Duis ac lorem nec velit malesuada tempus hendrerit ut metus. Quisque a lacus vel lectus rhoncus luctus. Aliquam ornare, nunc sit amet porttitor ornare, libero lectus congue enim, vitae tincidunt sapien justo et ligula. Proin vestibulum blandit fringilla.</p>");
-					$(".scrollbar_reset").scroller("reset");
+					$(".demo .scrollbar_reset").scroller("reset");
 					return false;
 				});
 
 				// Scroll To Position
-				$(".scroll_top").on("click", function(e) {
+				$(".demo .scroll_top").on("click", function(e) {
 					e.preventDefault();
 					e.stopPropagation();
-					$(".scrollbar_scroll").scroller("scroll", 0);
+					$(".demo .scrollbar_scroll").scroller("scroll", 0);
 				});
-				$(".scroll_mid").on("click", function(e) {
+				$(".demo .scroll_mid").on("click", function(e) {
 					e.preventDefault();
 					e.stopPropagation();
-					$(".scrollbar_scroll").scroller("scroll", 200);
+					$(".demo .scrollbar_scroll").scroller("scroll", 200);
 				});
-				$(".scroll_target").on("click", function(e) {
+				$(".demo .scroll_target").on("click", function(e) {
 					e.preventDefault();
 					e.stopPropagation();
-					$(".scrollbar_scroll").scroller("scroll", $(this).attr("href"));
+					$(".demo .scrollbar_scroll").scroller("scroll", $(this).attr("href"));
 				});
-                $(".scroll_animate").on("click", function(e) {
+                $(".demo .scroll_animate").on("click", function(e) {
                     e.preventDefault();
                     e.stopPropagation();
-                    $(".scrollbar_scroll").scroller("scroll", 300, 500);
+                    $(".demo .scrollbar_scroll").scroller("scroll", 300, 500);
                 });
+
+                $(".demo_tabbed").on("update.tabber", function() {
+					$(".demo .scrollbar").scroller("reset");
+				});
 
                 $(window).one("pronto.load", function() {
 					$(window).off("snap.demo");
-					$(".reset_click").off("click");
-					$(".scroll_top").off("click");
-					$(".scroll_mid").off("click");
-					$(".scroll_target").off("click");
-	                $(".scroll_animate").off("click");
-				});
+					$(".demo .scrollbar").scroller("destroy");
+					$(".demo .reset_click").off("click");
+					$(".demo .scroll_top").off("click");
+					$(".demo .scroll_mid").off("click");
+					$(".demo .scroll_target").off("click");
+	                $(".demo .scroll_animate").off("click");
+	                $(".demo_tabbed").off("update.tabber");
+				}).trigger("snap");
 			});
 		</script>
 
@@ -104,7 +110,7 @@
 				<!--[DEMO:START-CONTENT]-->
 
 				<!-- BASIC -->
-				<h3>Basic</h3>
+				<h2>Basic</h2>
 				<p>The most basic method is simply applying the scroller plugin:</p>
 
 				<pre class="example"><code class="language-javascript">$(".scrollbar").scroller();</code></pre>
@@ -121,7 +127,7 @@
 				<br>
 
 				<!-- ADVANCED -->
-				<h3>Advanced</h3>
+				<h2>Advanced</h2>
 				<p>Customize a specific Scroller instance:</p>
 
 				<pre class="example"><code class="language-javascript">$(".scrollbar").scroller({
@@ -142,7 +148,7 @@
 				<br>
 
 				<!-- HORIZONTAL -->
-				<h3>Horizontal</h3>
+				<h2>Horizontal</h2>
 				<p>Add a horizontal scrollbar to a content element:</p>
 
 				<pre class="example"><code class="language-javascript">$(".scrollbar").scroller({
@@ -163,7 +169,7 @@
 				<br>
 
 				<!-- RESET -->
-				<h3>Reset</h3>
+				<h2>Reset</h2>
 				<p>After appending content, you will need to call the reset method on the target element:</p>
 
 				<pre class="example"><code class="language-javascript">$(".scrollbar").scroller("reset");</code></pre>
@@ -179,7 +185,7 @@
 				<br>
 
 				<!-- SCROLL -->
-				<h3>Scroll</h3>
+				<h2>Scroll</h2>
 				<p>Manually scroll an instance to a specific pixel value or selector:</p>
 
 				<pre class="example"><code class="language-javascript">$(".scrollbar").scroller("scroll", [value | selector]);</code></pre>

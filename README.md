@@ -7,4 +7,4 @@ A jQuery plugin for replacing default browser scrollbars. Part of the Formstone 
 - [Documentation](http://formstone.it/scroller/) 
 
 #### Bower Support 
-`bower install Scroller`
+`bower install Scroller` 

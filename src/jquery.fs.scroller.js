@@ -1,7 +1,23 @@
 ;(function ($, window) {
 	"use strict";
 
-	var $body = null;
+	var namespace = "scroller",
+		$body = null,
+		classes = {
+			base: "scroller",
+			content: "scroller-content",
+			bar: "scroller-bar",
+			track: "scroller-track",
+			handle: "scroller-handle",
+			isHorizontal: "scroller-horizontal",
+			isSetup: "scroller-setup",
+			isActive: "scroller-active"
+		},
+		events = {
+			start: "touchstart." + namespace + " mousedown." + namespace,
+			move: "touchmove." + namespace + " mousemove." + namespace,
+			end: "touchend." + namespace + " mouseup." + namespace
+		};
 
 	/**
 	 * @options
@@ -41,19 +57,17 @@
 		 */
 		destroy: function() {
 			return $(this).each(function(i, el) {
-				var data = $(el).data("scroller");
+				var data = $(el).data(namespace);
 
 				if (data) {
-					data.$scroller.removeClass(data.customClass)
-								  .removeClass("scroller")
-								  .removeClass("scroller-active");
+					data.$scroller.removeClass( [data.customClass, classes.base, classes.isActive].join(" ") );
 
 					data.$bar.remove();
 					data.$content.contents().unwrap();
 
-					data.$content.off(".scroller");
-					data.$scroller.off(".scroller")
-								  .removeData("scroller");
+					data.$content.off( classify(namespace) );
+					data.$scroller.off( classify(namespace) )
+								  .removeData(namespace);
 				}
 			});
 		},
@@ -68,7 +82,7 @@
 		 */
 		scroll: function(pos, dur) {
 			return $(this).each(function(i) {
-				var data = $(this).data("scroller"),
+				var data = $(this).data(namespace),
 	                duration = dur || options.duration;
 
 				if (typeof pos !== "number") {
@@ -85,11 +99,9 @@
 					}
 				}
 
-				if (data.horizontal) {
-					data.$content.stop().animate({ scrollLeft: pos }, duration);
-				} else {
-					data.$content.stop().animate({ scrollTop: pos }, duration);
-				}
+				var styles = data.horizontal ? { scrollLeft: pos } : { scrollTop: pos };
+
+				data.$content.stop().animate(styles, duration);
 			});
 		},
 
@@ -101,10 +113,16 @@
 		 */
 		reset: function()  {
 			return $(this).each(function(i) {
-				var data = $(this).data("scroller");
+				var data = $(this).data(namespace);
 
 				if (data) {
-					data.$scroller.addClass("scroller-setup");
+					data.$scroller.addClass(classes.isSetup);
+
+					var barStyles = {},
+						trackStyles = {},
+						handleStyles = {},
+						handlePosition = 0,
+						isActive = true;
 
 					if (data.horizontal) {
 						// Horizontal
@@ -121,30 +139,28 @@
 							right: data.trackWidth - data.handleWidth
 						};
 
-						data.$content.css({ paddingBottom: data.barHeight + data.paddingBottom });
-
-						var scrollLeft = data.$content.scrollLeft(),
-							handleLeft = scrollLeft * data.ratio;
-
-						if (data.scrollWidth <= data.frameWidth) {
-							data.$scroller.removeClass("scroller-active");
-						} else {
-							data.$scroller.addClass("scroller-active");
-						}
-
-						data.$bar.css({
-							width: data.frameWidth
+						data.$content.css({
+							paddingBottom: data.barHeight + data.paddingBottom
 						});
-						data.$track.css({
+
+						var scrollLeft = data.$content.scrollLeft();
+
+						handlePosition = scrollLeft * data.ratio;
+						isActive = (data.scrollWidth <= data.frameWidth);
+
+						barStyles = {
+							width: data.frameWidth
+						};
+
+						trackStyles = {
 							width: data.trackWidth,
 							marginLeft: data.trackMargin,
 							marginRight: data.trackMargin
-						});
-						data.$handle.css({
-							width: data.handleWidth
-						});
+						};
 
-						_position.apply(data.$scroller, [data, handleLeft]);
+						handleStyles = {
+							width: data.handleWidth
+						};
 					} else {
 						// Vertical
 						data.barWidth = data.$content[0].offsetWidth - data.$content[0].clientWidth;
@@ -160,31 +176,41 @@
 							bottom: data.trackHeight - data.handleHeight
 						};
 
-						var scrollTop = data.$content.scrollTop(),
-							handleTop = scrollTop * data.ratio;
+						var scrollTop = data.$content.scrollTop();
 
-						if (data.scrollHeight <= data.frameHeight) {
-							data.$scroller.removeClass("scroller-active");
-						} else {
-							data.$scroller.addClass("scroller-active");
-						}
+						handlePosition = scrollTop * data.ratio;
+						isActive = (data.scrollHeight <= data.frameHeight);
 
-						data.$bar.css({
+						barStyles = {
 							height: data.frameHeight
-						});
-						data.$track.css({
+						};
+
+						trackStyles = {
 							height: data.trackHeight,
 							marginBottom: data.trackMargin,
 							marginTop: data.trackMargin
-						});
-						data.$handle.css({
-							height: data.handleHeight
-						});
+						};
 
-						_position.apply(data.$scroller, [data, handleTop]);
+						handleStyles = {
+							height: data.handleHeight
+						};
 					}
 
-					data.$scroller.removeClass("scroller-setup");
+					// Updates
+
+					if (isActive) {
+						data.$scroller.removeClass(classes.isActive);
+					} else {
+						data.$scroller.addClass(classes.isActive);
+					}
+
+					data.$bar.css(barStyles);
+					data.$track.css(trackStyles);
+					data.$handle.css(handleStyles);
+
+					position(data, handlePosition);
+
+					data.$scroller.removeClass(classes.isSetup);
 				}
 			});
 		}
@@ -192,11 +218,11 @@
 
 	/**
 	 * @method private
-	 * @name _init
+	 * @name init
 	 * @description Initializes plugin
 	 * @param opts [object] "Initialization options"
 	 */
-	function _init(opts) {
+	function init(opts) {
 		// Local options
 		opts = $.extend({}, options, opts || {});
 
@@ -208,55 +234,55 @@
 		// Apply to each element
 		var $items = $(this);
 		for (var i = 0, count = $items.length; i < count; i++) {
-			_build($items.eq(i), opts);
+			build($items.eq(i), opts);
 		}
 		return $items;
 	}
 
 	/**
 	 * @method private
-	 * @name _build
+	 * @name build
 	 * @description Builds each instance
 	 * @param $scroller [jQuery object] "Target jQuery object"
 	 * @param opts [object] <{}> "Options object"
 	 */
-	function _build($scroller, opts) {
-		if (!$scroller.hasClass("scroller")) {
+	function build($scroller, opts) {
+		if (!$scroller.hasClass(classes.base)) {
 			// EXTEND OPTIONS
-			opts = $.extend({}, opts, $scroller.data("scroller-options"));
+			opts = $.extend({}, opts, $scroller.data(namespace + "-options"));
 
 			var html = '';
 
-			html += '<div class="scroller-bar">';
-			html += '<div class="scroller-track">';
-			html += '<div class="scroller-handle">';
+			html += '<div class="' + classes.bar + '">';
+			html += '<div class="' + classes.track + '">';
+			html += '<div class="' + classes.handle + '">';
 			html += '</div></div></div>';
 
 			opts.paddingRight = parseInt($scroller.css("padding-right"), 10);
 			opts.paddingBottom = parseInt($scroller.css("padding-bottom"), 10);
 
-			$scroller.addClass(opts.customClass + " scroller")
-					 .wrapInner('<div class="scroller-content" />')
+			$scroller.addClass( [classes.base, opts.customClass].join(" ") )
+					 .wrapInner('<div class="' + classes.content + '" />')
 					 .prepend(html);
 
 			if (opts.horizontal) {
-				$scroller.addClass("scroller-horizontal");
+				$scroller.addClass(classes.isHorizontal);
 			}
 
 			var data = $.extend({
 				$scroller: $scroller,
-				$content: $scroller.find(".scroller-content"),
-				$bar: $scroller.find(".scroller-bar"),
-				$track: $scroller.find(".scroller-track"),
-				$handle: $scroller.find(".scroller-handle")
+				$content: $scroller.find( classify(classes.content) ),
+				$bar: $scroller.find( classify(classes.content) ),
+				$track: $scroller.find( classify(classes.track) ),
+				$handle: $scroller.find( classify(classes.handle) )
 			}, opts);
 
 			data.trackMargin = parseInt(data.trackMargin, 10);
 
-			data.$content.on("scroll.scroller", data, _onScroll);
-			data.$scroller.on("touchstart.scroller mousedown.scroller", ".scroller-track", data, _onTrackDown)
-						  .on("touchstart.scroller mousedown.scroller", ".scroller-handle", data, _onHandleDown)
-						  .data("scroller", data);
+			data.$content.on("scroll." + namespace, data, onScroll);
+			data.$scroller.on(events.start, classify(classes.track), data, onTrackDown)
+						  .on(events.start, classify(classes.handle), data, onHandleDown)
+						  .data(namespace, data);
 
 			pub.reset.apply($scroller);
 
@@ -268,95 +294,104 @@
 
 	/**
 	 * @method private
-	 * @name _onScroll
+	 * @name onScroll
 	 * @description Handles scroll event
 	 * @param e [object] "Event data"
 	 */
-	function _onScroll(e) {
+	function onScroll(e) {
 		e.preventDefault();
 		e.stopPropagation();
 
-		var data = e.data;
+		var data = e.data,
+			handleStyles = {};
 
 		if (data.horizontal) {
 			// Horizontal
 			var scrollLeft = data.$content.scrollLeft();
+
 			if (scrollLeft < 0) {
 				scrollLeft = 0;
 			}
 
 			var handleLeft = scrollLeft / data.scrollRatio;
+
 			if (handleLeft > data.handleBounds.right) {
 				handleLeft = data.handleBounds.right;
 			}
 
-			data.$handle.css({ left: handleLeft });
+			handleStyles = {
+				left: handleLeft
+			};
 		} else {
 			// Vertical
 			var scrollTop = data.$content.scrollTop();
+
 			if (scrollTop < 0) {
 				scrollTop = 0;
 			}
 
 			var handleTop = scrollTop / data.scrollRatio;
+
 			if (handleTop > data.handleBounds.bottom) {
 				handleTop = data.handleBounds.bottom;
 			}
 
-			data.$handle.css({ top: handleTop });
+			handleStyles = {
+				top: handleTop
+			};
 		}
+
+		data.$handle.css(handleStyles);
 	}
 
 	/**
 	 * @method private
-	 * @name _onTrackDown
+	 * @name onTrackDown
 	 * @description Handles mousedown event on track
 	 * @param e [object] "Event data"
 	 */
-	function _onTrackDown(e) {
+	function onTrackDown(e) {
 		e.preventDefault();
 		e.stopPropagation();
 
 		var data = e.data,
 			oe = e.originalEvent,
 			offset = data.$track.offset(),
-			touch = (typeof oe.targetTouches !== "undefined") ? oe.targetTouches[0] : null;
-
-		var pageX = (touch) ? touch.pageX : e.clientX,
+			touch = (typeof oe.targetTouches !== "undefined") ? oe.targetTouches[0] : null,
+			pageX = (touch) ? touch.pageX : e.clientX,
 			pageY = (touch) ? touch.pageY : e.clientY;
 
 		if (data.horizontal) {
 			// Horizontal
 			data.mouseStart = pageX;
 			data.handleLeft = pageX - offset.left - (data.handleWidth / 2);
-			_position.apply(data.$scroller, [data, data.handleLeft]);
+
+			position(data, data.handleLeft);
 		} else {
 			// Vertical
 			data.mouseStart = pageY;
 			data.handleTop  = pageY - offset.top - (data.handleHeight / 2);
-			_position.apply(data.$scroller, [data, data.handleTop]);
+
+			position(data, data.handleTop);
 		}
 
-		data.$content.off(".scroller");
-		$body.on("touchmove.scroller mousemove.scroller", data, _onMouseMove)
-			 .on("touchend.scroller mouseup.scroller", data, _onMouseUp);
+		onStart(data);
 	}
 
 	/**
 	 * @method private
-	 * @name _onHandleDown
+	 * @name onHandleDown
 	 * @description Handles mousedown event on handle
 	 * @param e [object] "Event data"
 	 */
-	function _onHandleDown(e) {
+	function onHandleDown(e) {
 		e.preventDefault();
 		e.stopPropagation();
 
 		var data = e.data,
 			oe = e.originalEvent,
-			touch = (typeof oe.targetTouches !== "undefined") ? oe.targetTouches[0] : null;
-
-		var pageX = (touch) ? touch.pageX : e.clientX,
+			touch = (typeof oe.targetTouches !== "undefined") ? oe.targetTouches[0] : null,
+			pageX = (touch) ? touch.pageX : e.clientX,
 			pageY = (touch) ? touch.pageY : e.clientY;
 
 		if (data.horizontal) {
@@ -369,18 +404,29 @@
 			data.handleTop = parseInt(data.$handle.css("top"), 10);
 		}
 
-		data.$content.off(".scroller");
-		$body.on("touchmove.scroller mousemove.scroller", data, _onMouseMove)
-			 .on("touchend.scroller mouseup.scroller", data, _onMouseUp);
+		onStart(data);
 	}
 
 	/**
 	 * @method private
-	 * @name _onMouseMove
+	 * @name onStart
+	 * @description Handles touch.mouse start
+	 * @param data [object] "Instance data"
+	 */
+	function onStart(data) {
+		data.$content.off( classify(namespace) );
+
+		$body.on(events.move, data, onMouseMove)
+			 .on(events.end, data, onMouseUp);
+	}
+
+	/**
+	 * @method private
+	 * @name onMouseMove
 	 * @description Handles mousemove event
 	 * @param e [object] "Event data"
 	 */
-	function _onMouseMove(e) {
+	function onMouseMove(e) {
 		e.preventDefault();
 		e.stopPropagation();
 
@@ -388,9 +434,8 @@
 			oe = e.originalEvent,
 			pos = 0,
 			delta = 0,
-			touch = (typeof oe.targetTouches !== "undefined") ? oe.targetTouches[0] : null;
-
-		var pageX = (touch) ? touch.pageX : e.clientX,
+			touch = (typeof oe.targetTouches !== "undefined") ? oe.targetTouches[0] : null,
+			pageX = (touch) ? touch.pageX : e.clientX,
 			pageY = (touch) ? touch.pageY : e.clientY;
 
 		if (data.horizontal) {
@@ -403,83 +448,106 @@
 			pos = data.handleTop - delta;
 		}
 
-		_position.apply(data.$scroller, [data, pos]);
+		position(data, pos);
 	}
 
 	/**
 	 * @method private
-	 * @name _onMouseUp
+	 * @name onMouseUp
 	 * @description Handles mouseup event
 	 * @param e [object] "Event data"
 	 */
-	function _onMouseUp(e) {
+	function onMouseUp(e) {
 		e.preventDefault();
 		e.stopPropagation();
 
 		var data = e.data;
 
-		data.$content.on("scroll.scroller", data, _onScroll);
+		data.$content.on("scroll.scroller", data, onScroll);
 		$body.off(".scroller");
 	}
 
 	/**
 	 * @method private
-	 * @name _onTouchEnd
+	 * @name onTouchEnd
 	 * @description Handles mouseup event
 	 * @param e [object] "Event data"
 	 */
-	function _onTouchEnd(e) {
+	function onTouchEnd(e) {
 		e.preventDefault();
 		e.stopPropagation();
 
 		var data = e.data;
 
-		data.$content.on("scroll.scroller", data, _onScroll);
+		data.$content.on("scroll.scroller", data, onScroll);
 		$body.off(".scroller");
 	}
 
 	/**
 	 * @method private
-	 * @name _position
+	 * @name position
 	 * @description Position handle based on scroll
 	 * @param data [object] "Instance data"
 	 * @param pos [int] "Scroll position"
 	 */
-	function _position(data, pos) {
+	function position(data, pos) {
+		var handleStyles = {};
+
 		if (data.horizontal) {
 			// Horizontal
 			if (pos < data.handleBounds.left) {
 				pos = data.handleBounds.left;
 			}
+
 			if (pos > data.handleBounds.right) {
 				pos = data.handleBounds.right;
 			}
 
 			var scrollLeft = Math.round(pos * data.scrollRatio);
 
-			data.$handle.css({ left: pos });
+			handleStyles = {
+				left: pos
+			};
+
 			data.$content.scrollLeft( scrollLeft );
 		} else {
 			// Vertical
 			if (pos < data.handleBounds.top) {
 				pos = data.handleBounds.top;
 			}
+
 			if (pos > data.handleBounds.bottom) {
 				pos = data.handleBounds.bottom;
 			}
 
 			var scrollTop = Math.round(pos * data.scrollRatio);
 
-			data.$handle.css({ top: pos });
+			handleStyles = {
+				top: pos
+			};
+
 			data.$content.scrollTop( scrollTop );
 		}
+
+		data.$handle.css(handleStyles);
+	}
+
+	/**
+	 * @method private
+	 * @name classify
+	 * @description Create class selector from text
+	 * @param text [string] "Text to convert"
+	 * @return [string] "New class name"
+	 */
+	function classify(text) {
+		return "." + text;
 	}
 
 	$.fn.scroller = function(method) {
 		if (pub[method]) {
 			return pub[method].apply(this, Array.prototype.slice.call(arguments, 1));
 		} else if (typeof method === 'object' || !method) {
-			return _init.apply(this, arguments);
+			return init.apply(this, arguments);
 		}
 		return this;
 	};
