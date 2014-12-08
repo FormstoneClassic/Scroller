@@ -543,7 +543,7 @@
 		return "." + text;
 	}
 
-	$.fn.scroller = function(method) {
+	$.fn[namespace] = function(method) {
 		if (pub[method]) {
 			return pub[method].apply(this, Array.prototype.slice.call(arguments, 1));
 		} else if (typeof method === 'object' || !method) {
@@ -552,7 +552,7 @@
 		return this;
 	};
 
-	$.scroller = function(method) {
+	$[namespace] = function(method) {
 		if (method === "defaults") {
 			pub.defaults.apply(this, Array.prototype.slice.call(arguments, 1));
 		}
