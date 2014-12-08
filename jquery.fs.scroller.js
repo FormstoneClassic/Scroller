@@ -1,5 +1,5 @@
 /* 
- * Scroller v3.1.0 - 2014-12-08 
+ * Scroller v3.1.2 - 2014-12-08 
  * A jQuery plugin for replacing default browser scrollbars. Part of the Formstone Library. 
  * http://formstone.it/scroller/ 
  * 
@@ -280,7 +280,7 @@
 			var data = $.extend({
 				$scroller: $scroller,
 				$content: $scroller.find( classify(classes.content) ),
-				$bar: $scroller.find( classify(classes.content) ),
+				$bar: $scroller.find( classify(classes.bar) ),
 				$track: $scroller.find( classify(classes.track) ),
 				$handle: $scroller.find( classify(classes.handle) )
 			}, opts);
