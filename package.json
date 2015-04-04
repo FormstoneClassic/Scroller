@@ -14,10 +14,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/Formstone/Scroller"
+    "url": "https://github.com/FormstoneClassic/Scroller"
   },
-  "homepage": "http://formstone.it/scroller/",
-  "demo": "http://formstone.it/components/Scroller/demo/index.html",
+  "homepage": "http://classic.formstone.it/scroller/",
+  "demo": "http://classic.formstone.it/components/Scroller/demo/index.html",
   "license": "MIT",
   "author": {
     "name": "Ben Plum",

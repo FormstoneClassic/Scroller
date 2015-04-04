@@ -8,7 +8,7 @@
     "url": "http://www.benplum.com"
   },
   "license": "MIT",
-  "homepage": "http://formstone.it/scroller/",
+  "homepage": "http://classic.formstone.it/scroller/",
   "main": [
     "jquery.fs.scroller.js",
     "jquery.fs.scroller.css"

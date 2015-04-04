@@ -25,9 +25,9 @@
     "jquery",
     "formstone"
   ],
-  "docs": "http://formstone.it/scroller/",
-  "demo": "http://formstone.it/scroller/",
-  "download": "https://github.com/Formstone/Scroller",
-  "bugs": "https://github.com/Formstone/Scroller/issues",
-  "homepage": "http://formstone.it/scroller/"
+  "docs": "http://classic.formstone.it/scroller/",
+  "demo": "http://classic.formstone.it/scroller/",
+  "download": "https://github.com/FormstoneClassic/Scroller",
+  "bugs": "https://github.com/FormstoneClassic/Scroller/issues",
+  "homepage": "http://classic.formstone.it/scroller/"
 }
